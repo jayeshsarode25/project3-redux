@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import UserProfile from "../pages/user/UserProfile";
 import PageNotFound from "../pages/PageNotFound";
 import Auth from "./Auth";
+import Cart from "../pages/Cart";
 
 const MainRoutes = () => {
   return (
@@ -33,6 +34,16 @@ const MainRoutes = () => {
           </Auth>
         }
       />
+
+      <Route
+        path="/cart"
+        element={
+          <Auth>
+            <Cart />
+          </Auth>
+        }
+      />
+
       <Route
         path="/product/:id"
         element={

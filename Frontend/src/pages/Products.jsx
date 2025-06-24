@@ -1,10 +1,27 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { asyncupdateuser } from "../store/action/userAction";
 
 const Products = () => {
-  const products = useSelector((state) => state.productReducer.products);
-  
-  
+  const dispatch = useDispatch();
+
+ const users = useSelector((state) => state.userReducer.users);
+    const products = useSelector((state) => state.productReducer.products);
+
+  const AddtoCartHandler = (product) => {
+    const copyuser = { ...users, cart: [...users.cart] };
+    const x = copyuser.cart.findIndex((c) => c?.product?.id == product.id);
+
+    if (x == -1) {
+      copyuser.cart.push({ product, quantity: 1 });
+    } else {
+      copyuser.cart[x] = {
+        product,
+        quantity: copyuser.cart[x].quantity + 1,
+      };
+    }
+    dispatch(asyncupdateuser(copyuser.id, copyuser));
+  };
 
   const renderproduct = products.map((product) => (
     <div
@@ -15,18 +32,28 @@ const Products = () => {
       {/* /* {<img
         src={product.image} 
         className="w[10%] h-48 object-contain mb-4"
-      />} */ }
-      <h2 className="text-lg font-semibold mb-2 line-clamp-1">{product.title}</h2>
+      />} */}
+      <h2 className="text-lg font-semibold mb-2 line-clamp-1">
+        {product.title}
+      </h2>
       <p className="text-gray-600 text-sm mb-3 line-clamp-2">
         {product.description.slice(0, 100)}...
       </p>
       <div className="flex items-center justify-between">
         <p className="text-indigo-600 font-bold text-lg">${product.price}</p>
-        <button className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors">
+        <button
+          onClick={() => AddtoCartHandler(product)}
+          className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors"
+        >
           Add to Cart
         </button>
       </div>
-      <Link to={`/product/${product.id}`} className=" text-zinc-900 px-4 py-2 m-3 flex justify-center items-center rounded-lg hover:bg-sky-500 transition-colors">More Info</Link>
+      <Link
+        to={`/product/${product.id}`}
+        className=" text-zinc-900 px-4 py-2 m-3 flex justify-center items-center rounded-lg hover:bg-sky-500 transition-colors"
+      >
+        More Info
+      </Link>
     </div>
   ));
 

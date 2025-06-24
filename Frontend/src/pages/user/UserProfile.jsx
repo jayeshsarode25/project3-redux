@@ -9,9 +9,7 @@ import {
 
 const UserProfile = () => {
   const { id } = useParams();
-  const {
-    userReducer: { users },
-  } = useSelector((state) => state);
+  const users = useSelector((state) => state.userReducer.users);
 
   const { register, reset, handleSubmit } = useForm({
     defaultValues: {
